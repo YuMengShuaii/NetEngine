@@ -5,6 +5,9 @@ import com.enation.javashop.net.engine.rxbus.RxBus;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.ResponseBody;
 import okio.Buffer;
@@ -12,9 +15,6 @@ import okio.BufferedSource;
 import okio.ForwardingSource;
 import okio.Okio;
 import okio.Source;
-import rx.Observable;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * 监听下载进度的自定义ResponseBody
@@ -94,9 +94,9 @@ public class ProgressResponseBody extends ResponseBody
                     RxBus.getDefault().post(new DownloadProgressEvent(contentLength(), mProgress));
                      mLastSendTime = System.currentTimeMillis();
                  } else if (mProgress == contentLength()) {
-                    Observable.just(mProgress).delaySubscription(500, TimeUnit.MILLISECONDS, Schedulers.io()).subscribe(new Action1<Long>() {
+                    Observable.just(mProgress).delaySubscription(500, TimeUnit.MILLISECONDS, Schedulers.io()).subscribe(new Consumer<Long>() {
                         @Override
-                        public void call(Long aLong) {
+                        public void accept(Long aLong) throws Exception {
                             RxBus.getDefault().post(new DownloadProgressEvent(contentLength(), mProgress));
                         }
                     });

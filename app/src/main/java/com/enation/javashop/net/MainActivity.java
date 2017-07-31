@@ -29,12 +29,7 @@ public class MainActivity extends AppCompatActivity {
         RxBus.getDefault().register(DownloadProgressEvent.class, BusType.MAIN, new RxBus.RxBusEvent<DownloadProgressEvent>() {
             @Override
             public void event(final DownloadProgressEvent data) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
                         textView.setText(data.getProgressPercent()+"");
-                    }
-                });
             }
         });
         ApiService apiService = NetEngineFactory.getInstance().createService(ApiService.class,"http://192.168.1.178:5555/api/");

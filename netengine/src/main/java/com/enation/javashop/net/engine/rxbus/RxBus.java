@@ -4,11 +4,15 @@ import android.util.Log;
 
 import com.enation.javashop.net.engine.utils.ThreadFromUtils;
 
-import rx.Observer;
-import rx.Subscription;
-import rx.subjects.PublishSubject;
-import rx.subjects.SerializedSubject;
-import rx.subjects.Subject;
+import java.util.HashMap;
+
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 
 /**
  * RxBus
@@ -19,11 +23,14 @@ public class RxBus {
      */
     private static volatile RxBus defaultInstance;
 
-    private final Subject<Object, Object> bus;
-
+    /**
+     * bus对象
+     */
+    private final Subject<Object> bus;
     // PublishSubject只会把在订阅发生的时间点之后来自原始Observable的数据发射给观察者
+
     public RxBus() {
-        bus = new SerializedSubject<>(PublishSubject.create());
+        bus = PublishSubject.create().toSerialized();
     }
 
     // 单例RxBus
@@ -44,27 +51,22 @@ public class RxBus {
     }
 
     // 根据传递的 eventType 类型返回特定类型(eventType)的 被观察者
-    public  <T> Subscription register(final Class<T> cl, @BusType.Type int type, final RxBusEvent<T> rxevent) {
-        return bus.ofType(cl)
-                .compose(type==BusType.MAIN? ThreadFromUtils.<T>defaultSchedulers():ThreadFromUtils.<T>all_io())
-                .subscribe(new Observer<T>() {
+    public  <T> Disposable register(final Class<T> cl, @BusType.Type int type, final RxBusEvent<T> rxevent) {
+        return bus.toFlowable(BackpressureStrategy.BUFFER).ofType(cl)
+                .compose(type==BusType.MAIN? ThreadFromUtils.<T>defaultFolwSchedulers():ThreadFromUtils.<T>Flow_all_io())
+                .subscribe(new Consumer<T>() {
                     @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("RxBus","订阅"+cl.getClass().getName()+"的Activity出现问题，问题原因："+e.getMessage()+"请快速定位问题！");
-                    }
-
-                    @Override
-                    public void onNext(T t) {
+                    public void accept(@NonNull T t) throws Exception {
                         rxevent.event(t);
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable e) throws Exception {
+                        Log.e("RxBus","订阅"+cl.getClass().getName()+"的Activity出现问题，问题原因："+e.getMessage()+"请快速定位问题！");
                     }
                 });
     }
-
     /**
      * 重写默认U线程方法
      * @param cl         注册事件
@@ -72,7 +74,7 @@ public class RxBus {
      * @param <T>        注册泛型
      * @return           观察者
      */
-    public  <T> Subscription register(final Class<T> cl , final RxBusEvent<T> rxevent){
+    public  <T> Disposable register(final Class<T> cl , final RxBusEvent<T> rxevent){
            return register(cl,BusType.MAIN,rxevent);
     }
     /**
