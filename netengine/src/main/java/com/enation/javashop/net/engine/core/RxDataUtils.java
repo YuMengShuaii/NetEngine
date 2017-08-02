@@ -4,6 +4,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.enation.javashop.net.engine.config.NetEngineConfig;
+import com.enation.javashop.net.engine.lib.rxandroid.schedulers.AndroidSchedulers;
 import com.enation.javashop.net.engine.utils.BaseData;
 import com.enation.javashop.net.engine.utils.ErrorBody;
 import com.enation.javashop.net.engine.utils.TheadUtils;
@@ -19,8 +20,6 @@ import java.net.SocketTimeoutException;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;

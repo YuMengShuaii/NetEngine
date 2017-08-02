@@ -1,8 +1,9 @@
 package com.enation.javashop.net.engine.utils;
 
 
+import com.enation.javashop.net.engine.lib.rxandroid.schedulers.AndroidSchedulers;
+
 import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * 线程工具类

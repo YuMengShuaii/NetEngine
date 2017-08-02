@@ -3,10 +3,10 @@ package com.enation.javashop.net.engine.core;
 import android.util.Log;
 
 import com.enation.javashop.net.engine.config.NetEngineConfig;
-import com.franmontiel.persistentcookiejar.ClearableCookieJar;
-import com.franmontiel.persistentcookiejar.PersistentCookieJar;
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.enation.javashop.net.engine.lib.cookies.ClearableCookieJar;
+import com.enation.javashop.net.engine.lib.cookies.PersistentCookieJar;
+import com.enation.javashop.net.engine.lib.cookies.cache.SetCookieCache;
+import com.enation.javashop.net.engine.lib.cookies.persistence.SharedPrefsCookiePersistor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.File;
