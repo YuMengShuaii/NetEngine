@@ -11,15 +11,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.enation.javashop.net.engine.lib.rxandroid;
+package io.reactivex.android;
 
 import android.os.Looper;
-
-import com.enation.javashop.net.engine.lib.rxandroid.schedulers.AndroidSchedulers;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class MainThreadDisposable implements Disposable {
     /**

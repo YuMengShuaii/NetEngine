@@ -11,16 +11,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.enation.javashop.net.engine.lib.rxandroid.schedulers;
+package io.reactivex.android.schedulers;
 
 import android.os.Handler;
 import android.os.Looper;
 
-import com.enation.javashop.net.engine.lib.rxandroid.plugins.RxAndroidPlugins;
-
 import java.util.concurrent.Callable;
 
 import io.reactivex.Scheduler;
+import io.reactivex.android.plugins.RxAndroidPlugins;
 
 /** Android-specific Schedulers. */
 public final class AndroidSchedulers {

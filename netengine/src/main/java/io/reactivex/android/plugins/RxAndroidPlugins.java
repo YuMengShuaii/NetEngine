@@ -11,14 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.enation.javashop.net.engine.lib.rxandroid.plugins;
+package io.reactivex.android.plugins;
 
 import java.util.concurrent.Callable;
 
 import io.reactivex.Scheduler;
 import io.reactivex.exceptions.Exceptions;
 import io.reactivex.functions.Function;
-
 
 /**
  * Utility class to inject handlers to certain standard RxAndroid operations.

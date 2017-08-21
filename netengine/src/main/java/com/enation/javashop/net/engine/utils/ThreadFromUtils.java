@@ -1,15 +1,12 @@
 package com.enation.javashop.net.engine.utils;
 
-
-import com.enation.javashop.net.engine.lib.rxandroid.schedulers.AndroidSchedulers;
-
 import org.reactivestreams.Publisher;
-
 import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.schedulers.Schedulers;
 
