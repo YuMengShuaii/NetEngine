@@ -9,9 +9,6 @@ import com.enation.javashop.net.engine.config.NetEngineConfig;
 import com.enation.javashop.net.engine.core.NetEngineFactory;
 import com.enation.javashop.net.engine.plugin.exception.AttachObserver;
 import com.enation.javashop.net.engine.plugin.exception.ExceptionHandle;
-import com.enation.javashop.net.engine.plugin.exception.RestfulException;
-import com.enation.javashop.net.engine.plugin.exception.RestfulExceptionInterceptor;
-import com.enation.javashop.net.engine.utils.ErrorBody;
 import com.enation.javashop.net.engine.utils.ThreadFromUtils;
 import com.google.gson.Gson;
 
@@ -19,10 +16,6 @@ import java.util.Map;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     protected CompositeDisposable compositeDisposable = null;
@@ -64,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                   .subscribe(new AttachObserver<Map>(this) {
                     @Override
                     public void onError(ExceptionHandle.ResponeThrowable responeThrowable) {
-                        Log.e("ERROR",responeThrowable.message);
+                        Log.e("ERROR",responeThrowable.customMessage);
                     }
 
                     @Override

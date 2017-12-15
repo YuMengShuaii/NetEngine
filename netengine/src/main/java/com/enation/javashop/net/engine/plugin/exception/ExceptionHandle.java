@@ -34,72 +34,72 @@ public class ExceptionHandle {
             ex = new ResponeThrowable(e, ERROR.HTTP_ERROR);
             switch (httpException.code()) {
                 case UNAUTHORIZED:
-                    ex.message = "没有权限";
+                    ex.customMessage = "没有权限";
                     break;
                 case FORBIDDEN:
-                    ex.message = "服务器拒绝请求";
+                    ex.customMessage = "服务器拒绝请求";
                     break;
                 case NOT_FOUND:
-                    ex.message = "找不到指定请求路径";
+                    ex.customMessage = "找不到指定请求路径";
                     break;
                 case REQUEST_TIMEOUT:
-                    ex.message = "资源请求超时";
+                    ex.customMessage = "资源请求超时";
                     break;
                 case GATEWAY_TIMEOUT:
-                    ex.message = "网关请求超时";
+                    ex.customMessage = "网关请求超时";
                     break;
                 case INTERNAL_SERVER_ERROR:
-                    ex.message = "错误网关";
+                    ex.customMessage = "错误网关";
                     break;
                 case BAD_GATEWAY:
-                    ex.message = "错误网关";
+                    ex.customMessage = "错误网关";
                     break;
                 case SERVICE_UNAVAILABLE:
-                    ex.message = "服务不可用";
+                    ex.customMessage = "服务不可用";
                     break;
                 case NOT_ACCEPTABLE:
-                    ex.message = "无法接受该请求";
+                    ex.customMessage = "无法接受该请求";
                     break;
                 default:
-                    ex.message = "网络错误";
+                    ex.customMessage = "网络错误";
                     break;
             }
             return ex;
         } else if (e instanceof ServerException) {
             ServerException resultException = (ServerException) e;
             ex = new ResponeThrowable(resultException, resultException.code);
-            ex.message = resultException.message;
+            ex.customMessage = resultException.message;
             return ex;
         } else if (e instanceof JsonParseException
                 || e instanceof JSONException
                 /*|| e instanceof ParseException*/) {
             ex = new ResponeThrowable(e, ERROR.PARSE_ERROR);
-            ex.message = "解析错误";
+            ex.customMessage = "解析错误";
             return ex;
         } else if (e instanceof ConnectException) {
             ex = new ResponeThrowable(e, ERROR.NETWORD_ERROR);
-            ex.message = "连接失败";
+            ex.customMessage = "连接失败";
             return ex;
         } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
             ex = new ResponeThrowable(e, ERROR.SSL_ERROR);
-            ex.message = "证书验证失败";
+            ex.customMessage = "证书验证失败";
             return ex;
         }else if (e instanceof SocketTimeoutException) {
             ex = new ResponeThrowable(e, ERROR.HTTP_TIMEOUT);
-            ex.message = "连接超时";
+            ex.customMessage = "连接超时";
             return ex;
         }else if(e instanceof RestfulException){
             ex = new ResponeThrowable(e, ERROR.HTTP_TIMEOUT);
-            ex.message = ((RestfulException) e).getErrorBody().getError_message();
+            ex.customMessage = ((RestfulException) e).getErrorBody().getError_message();
             return ex;
         }else if(e instanceof UnknownHostException){
             ex = new ResponeThrowable(e, ERROR.UNKNOWN_HOST);
-            ex.message ="未识别的服务器地址";
+            ex.customMessage ="未识别的服务器地址";
             return ex;
         }
         else {
             ex = new ResponeThrowable(e, ERROR.UNKNOWN);
-            ex.message = "未知错误";
+            ex.customMessage = "未知错误";
             return ex;
         }
     }
@@ -144,7 +144,7 @@ public class ExceptionHandle {
 
     public static class ResponeThrowable extends Exception {
         public int code;
-        public String message;
+        public String customMessage;
 
         public ResponeThrowable(Throwable throwable, int code) {
             super(throwable);
