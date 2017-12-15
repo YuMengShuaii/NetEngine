@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enation.javashop.net.engine.lib.cookies;
+package com.enation.javashop.net.engine.plugin.cookies;
 
 import okhttp3.CookieJar;
 

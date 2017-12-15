@@ -1,6 +1,6 @@
 package com.enation.javashop.net.engine.core;
 
-import com.enation.javashop.net.engine.rxbus.RxBus;
+import com.enation.javashop.net.engine.plugin.rxbus.RxBus;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -89,7 +89,7 @@ public class ProgressResponseBody extends ResponseBody
             {
                 long bytesRead = super.read(sink, byteCount);
                 mProgress += bytesRead == -1 ? 0 : bytesRead;
-                if (!contentType().toString().contains("application/json")&&!contentType().toString().contains("image")){
+                if (contentType()!=null&&!contentType().toString().contains("application/json")&&!contentType().toString().contains("image")){
                 if (System.currentTimeMillis() - mLastSendTime > 500) {
                     RxBus.getDefault().post(new DownloadProgressEvent(contentLength(), mProgress));
                      mLastSendTime = System.currentTimeMillis();

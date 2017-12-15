@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enation.javashop.net.engine.lib.cookies.cache;
+package com.enation.javashop.net.engine.plugin.cookies.cache;
 
 import java.util.ArrayList;
 import java.util.Collection;

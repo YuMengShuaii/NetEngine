@@ -14,26 +14,37 @@
  * limitations under the License.
  */
 
-package com.enation.javashop.net.engine.lib.cookies.cache;
+package com.enation.javashop.net.engine.plugin.cookies.persistence;
 
 import java.util.Collection;
+import java.util.List;
 
 import okhttp3.Cookie;
 
 /**
- * A CookieCache handles the volatile cookie session storage.
+ * A CookiePersistor handles the persistent cookie storage.
  */
-public interface CookieCache extends Iterable<Cookie> {
+public interface CookiePersistor {
+
+    List<Cookie> loadAll();
 
     /**
-     * Add all the new cookies to the session, existing cookies will be overwritten.
+     * Persist all cookies, existing cookies will be overwritten.
      *
-     * @param cookies
+     * @param cookies cookies persist
      */
-    void addAll(Collection<Cookie> cookies);
+    void saveAll(Collection<Cookie> cookies);
 
     /**
-     * Clear all the cookies from the session.
+     * Removes indicated cookies from persistence.
+     *
+     * @param cookies cookies to remove from persistence
+     */
+    void removeAll(Collection<Cookie> cookies);
+
+    /**
+     * Clear all cookies from persistence.
      */
     void clear();
+
 }

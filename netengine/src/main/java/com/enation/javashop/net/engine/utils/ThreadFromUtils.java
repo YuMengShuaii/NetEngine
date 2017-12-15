@@ -1,5 +1,10 @@
 package com.enation.javashop.net.engine.utils;
 
+import android.util.Log;
+
+import com.enation.javashop.net.engine.plugin.exception.RestfulException;
+import com.google.gson.Gson;
+
 import org.reactivestreams.Publisher;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;
@@ -8,7 +13,9 @@ import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 /**
  * 线程控制类

@@ -3,10 +3,10 @@ package com.enation.javashop.net.engine.core;
 import android.util.Log;
 
 import com.enation.javashop.net.engine.config.NetEngineConfig;
-import com.enation.javashop.net.engine.lib.cookies.ClearableCookieJar;
-import com.enation.javashop.net.engine.lib.cookies.PersistentCookieJar;
-import com.enation.javashop.net.engine.lib.cookies.cache.SetCookieCache;
-import com.enation.javashop.net.engine.lib.cookies.persistence.SharedPrefsCookiePersistor;
+import com.enation.javashop.net.engine.plugin.cookies.ClearableCookieJar;
+import com.enation.javashop.net.engine.plugin.cookies.PersistentCookieJar;
+import com.enation.javashop.net.engine.plugin.cookies.cache.SetCookieCache;
+import com.enation.javashop.net.engine.plugin.cookies.persistence.SharedPrefsCookiePersistor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.File;
@@ -19,6 +19,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -111,12 +112,18 @@ public class NetEngineFactory {
      * @return  okHttpClint对象
      */
     private OkHttpClient getOkHttpClient() {
-        ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(NetEngineConfig.getContext().getApplicationContext()));
+        ClearableCookieJar cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(NetEngineConfig.getInstance().getContext().getApplicationContext()));
         //定制OkHttp
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-        if (NetEngineConfig.isOpenLogger()){
-            //添加Logger
-            httpClientBuilder.addInterceptor(getLog());
+        //添加Logger
+        if (NetEngineConfig.getInstance().isOpenLogger()){
+            NetEngineConfig.getInstance().addNetInterceptor(getLog());
+        }
+        if (NetEngineConfig.getInstance().getNetInterceptors()!=null&&NetEngineConfig.getInstance().getNetInterceptors().size()>0){
+            for (Interceptor interceptor : NetEngineConfig.getInstance().getNetInterceptors()) {
+                 httpClientBuilder.addInterceptor(interceptor);
+            }
+            NetEngineConfig.getInstance().clearNetInterceptor();
         }
         //维护Cookies
         httpClientBuilder.cookieJar(cookieJar);
@@ -127,7 +134,7 @@ public class NetEngineFactory {
         //设置读超时时间
         httpClientBuilder.readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         //设置缓存路径 名称
-        File httpCacheDirectory = new File(NetEngineConfig.getContext().getApplicationContext().getCacheDir(), "OkHttpCache");
+        File httpCacheDirectory = new File(NetEngineConfig.getInstance().getContext().getApplicationContext().getCacheDir(), "OkHttpCache");
         //设置缓存大小
         httpClientBuilder.cache(new Cache(httpCacheDirectory, 10 * 1024 * 1024));
         try {

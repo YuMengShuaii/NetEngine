@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package com.enation.javashop.net.engine.permission;
+package com.enation.javashop.net.engine.plugin.permission;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

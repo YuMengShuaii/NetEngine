@@ -1,4 +1,4 @@
-package com.enation.javashop.net.engine.permission;
+package com.enation.javashop.net.engine.plugin.permission;
 
 public class Permission {
     public final String name;

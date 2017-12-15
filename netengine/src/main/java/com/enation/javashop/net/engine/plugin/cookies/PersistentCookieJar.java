@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.enation.javashop.net.engine.lib.cookies;
+package com.enation.javashop.net.engine.plugin.cookies;
 
 
-import com.enation.javashop.net.engine.lib.cookies.cache.CookieCache;
-import com.enation.javashop.net.engine.lib.cookies.persistence.CookiePersistor;
+import com.enation.javashop.net.engine.plugin.cookies.cache.CookieCache;
+import com.enation.javashop.net.engine.plugin.cookies.persistence.CookiePersistor;
 
 import java.util.ArrayList;
 import java.util.Iterator;

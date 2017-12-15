@@ -7,7 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  * 线程工具类
  */
 
-public class TheadUtils {
+public class ThreadUtils {
 
     /**
      * UI线程

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enation.javashop.net.engine.lib.cookies.persistence;
+package com.enation.javashop.net.engine.plugin.cookies.persistence;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

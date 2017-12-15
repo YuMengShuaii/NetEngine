@@ -4,9 +4,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.enation.javashop.net.engine.config.NetEngineConfig;
-import com.enation.javashop.net.engine.utils.BaseData;
+import com.enation.javashop.net.engine.model.CommonModel;
 import com.enation.javashop.net.engine.utils.ErrorBody;
-import com.enation.javashop.net.engine.utils.TheadUtils;
+import com.enation.javashop.net.engine.utils.GsonHelper;
+import com.enation.javashop.net.engine.utils.ThreadUtils;
 import com.enation.javashop.net.engine.utils.ThreadFromUtils;
 import com.google.gson.Gson;
 
@@ -31,7 +32,7 @@ import retrofit2.Response;
 /**
  * 数据获取工具类
  */
-
+@Deprecated
 public class RxDataUtils {
 
     /**
@@ -46,7 +47,7 @@ public class RxDataUtils {
         call.enqueue(new Callback<T>() {
             @Override
             public void onResponse(Call<T> call, final Response<T> response) {
-                TheadUtils.MainThread().schedule(new Runnable() {
+                ThreadUtils.MainThread().schedule(new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -57,7 +58,7 @@ public class RxDataUtils {
                                 logger("ProcessingError:" + jsonstring);
                                 JSONObject jsonArray = new JSONObject(jsonstring);
                                 if (jsonArray.has("error_message")) {
-                                    getData.failed(new Gson().fromJson(jsonstring, ErrorBody.class));
+                                    getData.failed(GsonHelper.toInstance(jsonstring, ErrorBody.class));
                                 }
                             }
                         } catch (Exception e) {
@@ -69,7 +70,7 @@ public class RxDataUtils {
 
             @Override
             public void onFailure(Call<T> call, final Throwable throwable) {
-                TheadUtils.MainThread().schedule(new Runnable() {
+                ThreadUtils.MainThread().schedule(new Runnable() {
                     @Override
                     public void run() {
                         getData.failed(new ErrorBody(throwable.getMessage()));
@@ -89,16 +90,16 @@ public class RxDataUtils {
      * @param <T>        Json字符串转换的类 必须继承BaseData 这样才可以进行错误处理
      * @return 订阅者 防止内存泄漏
      */
-    public static <T extends BaseData> Disposable RxGet(Observable<T> observable, ObservableTransformer<T, T> OutType, final RxDataListener<T> getData) {
+    public static <T> Disposable RxGet(Observable<CommonModel<T>> observable, ObservableTransformer<CommonModel<T>, CommonModel<T>> OutType, final RxDataListener<CommonModel<T>> getData) {
         //开始请求网络！
         getData.start();
         logger("开始请求网络！");
         //线程处理
         return observable.compose(OutType)
                 //结果回调
-                .subscribe(new Consumer<T>() {
+                .subscribe(new Consumer<CommonModel<T>>() {
                     @Override
-                    public void accept(@NonNull T result) throws Exception {
+                    public void accept(@NonNull CommonModel<T> result) throws Exception {
                         logger("请求成功！");
                         if (result.getResult() == 1) {
                             getData.success(result);
@@ -126,8 +127,8 @@ public class RxDataUtils {
      * @param <T>        Json字符串转换的类 必须继承BaseData 这样才可以进行错误处理
      * @return 订阅者防止内存泄漏
      */
-    public static <T extends BaseData> Disposable RxGet(Observable<T> observable, final RxDataListener<T> rxLisener) {
-        return RxGet(observable, ThreadFromUtils.<T>defaultSchedulers(), rxLisener);
+    public static <T> Disposable RxGet(Observable<CommonModel<T>> observable, final RxDataListener<CommonModel<T>> rxLisener) {
+        return RxGet(observable, ThreadFromUtils.<CommonModel<T>>defaultSchedulers(), rxLisener);
     }
 
     /**
@@ -147,7 +148,7 @@ public class RxDataUtils {
                 .map(new Function<ResponseBody, File>() {
                     @Override
                     public File apply(ResponseBody responseBody) throws Exception {
-                        return downLoadManager.writeResponseBodyToDisk(NetEngineConfig.getContext(), responseBody);
+                        return downLoadManager.writeResponseBodyToDisk(NetEngineConfig.getInstance().getContext(), responseBody);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -171,7 +172,7 @@ public class RxDataUtils {
      *
      * @param <T> Gson解析类
      */
-    public interface RxDataListener<T extends BaseData> extends Start {
+    public interface RxDataListener<T extends CommonModel> extends Start {
         void success(T data);
 
         void failed(Throwable e);
@@ -205,11 +206,11 @@ public class RxDataUtils {
      * @param message toast的消息
      */
     private static void ToastS(String message) {
-        Toast.makeText(NetEngineConfig.getContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(NetEngineConfig.getInstance().getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     private static void logger(String message) {
-        if (NetEngineConfig.isOpenLogger()) {
+        if (NetEngineConfig.getInstance().isOpenLogger()) {
             Log.e("RxGet", message);
         }
     }
