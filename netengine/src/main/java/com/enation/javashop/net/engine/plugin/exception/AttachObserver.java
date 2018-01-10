@@ -27,7 +27,7 @@ public abstract class AttachObserver<T> implements Observer<T> {
     public void onSubscribe(Disposable disposable) {
         if (VoiNetTool.getAPNType(context) == VoiNetTool.netType.noneNet){
             disposable.dispose();
-            RxBus.getDefault().post(new NetStateEvent(NetState.NONE));
+            onNoneNet();
         }else{
             onStart();
             attachSubscribe(disposable);
@@ -50,6 +50,8 @@ public abstract class AttachObserver<T> implements Observer<T> {
     public abstract void onStart();
 
     public abstract void attachSubscribe(Disposable disposable);
+
+    public void onNoneNet(){}
 
     @Override
     public void onComplete() {}
