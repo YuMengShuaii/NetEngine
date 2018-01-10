@@ -78,7 +78,7 @@ public class ExceptionHandle {
             return ex;
         } else if (e instanceof ConnectException) {
             ex = new ResponeThrowable(e, ERROR.NETWORD_ERROR);
-            ex.customMessage = "连接失败";
+            ex.customMessage = "服务器连接失败";
             return ex;
         } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
             ex = new ResponeThrowable(e, ERROR.SSL_ERROR);
@@ -86,7 +86,7 @@ public class ExceptionHandle {
             return ex;
         }else if (e instanceof SocketTimeoutException) {
             ex = new ResponeThrowable(e, ERROR.HTTP_TIMEOUT);
-            ex.customMessage = "连接超时";
+            ex.customMessage = "服务器连接超时";
             return ex;
         }else if(e instanceof RestfulException){
             ex = new ResponeThrowable(e, ERROR.HTTP_TIMEOUT);
